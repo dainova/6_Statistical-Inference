@@ -1,0 +1,103 @@
+---
+title: "Statistical Inference Part 2"
+author: "Viktor M"
+date: "Thursday, April 24, 2015"
+output: pdf_document
+---
+
+[My github page](https://github.com/dainova/6_Statistical_Inference)
+
+<h4>Synopsis</h4>
+
+In this research we will analyze the ToothGrowth data in the R datasets package.
+
+<br><br>  
+
+
+  
+<h5>Here we assign all variables and prepare data set to be used in our research</h5> 
+
+```{r}
+data(ToothGrowth)
+ToothGrowth$dose<-as.factor(ToothGrowth$dose)
+head(ToothGrowth,3)
+str(ToothGrowth)
+```
+
+
+<h5> Create basic plot using lattice package</h5> 
+```{r}
+library(lattice)
+xyplot(len~dose|supp, ToothGrowth,
+       main="Scatterplots by supplement type and dose", 
+       ylab="Length", xlab="Dose")
+```
+<br><br>
+
+<h5> Create boxplot</h5> 
+```{r}
+boxplot(len ~ supp * dose,ToothGrowth, 
+        col="lightgreen", ylab="Length", xlab="Type & Dose",main="Boxplots by Type and Dow")
+```
+As we can observe OJ promotes better tooghgrowth comparing to VC.
+<br><br>
+
+
+<h5> Show basic structrue and summary for all data</h5> 
+```{r}
+summary(ToothGrowth)
+```
+<br>
+
+<h5> And show it for each of categories we researched</h5> 
+```{r}
+summary(ToothGrowth[ToothGrowth$supp=="OJ",])
+```
+<h5> And show it for each of categories we researched</h5> 
+```{r}
+summary(ToothGrowth[ToothGrowth$supp=="VC",])
+```
+<br><br>
+
+  
+  
+<h5> Now we will compare growth dynamics by categories using Confidence intervals and Hypythesis</h5> 
+First for supp :
+```{r}
+t.test(len ~supp,ToothGrowth[ToothGrowth$dose==0.5,],paired=FALSE, var.equal=TRUE)
+``` 
+Using t.test with dose=0.5  we observe that OJ performs bettter then VC.
+<br>
+  
+  
+```{r}
+t.test(len ~supp,ToothGrowth[ToothGrowth$dose==1,],paired=FALSE, var.equal=TRUE)
+```
+Using t.test with dose=1  we observe that results are opposite.
+<br>
+  
+  
+```{r}
+t.test(len ~supp,ToothGrowth[ToothGrowth$dose==2,],paired=FALSE, var.equal=TRUE)
+```
+And for dose=2  there are not significant difference.
+
+<br><br>
+
+And for len
+
+```{r}
+t.test(len ~dose,ToothGrowth[ToothGrowth$dose!=0.5,],paired=FALSE, var.equal=TRUE)
+```  
+
+```{r}
+t.test(len ~dose,ToothGrowth[ToothGrowth$dose!=2,],paired=FALSE, var.equal=TRUE)
+```    
+<br><br>
+
+ <h4>Conclusion</h4>
+
+ Assuming that each Guinea pig treated with suppliment type and dosage randomly assigned and 60 head cound can represent of all its population we ca state that:
+ 1. Supplement type doesn't have any effect on tooth growth.
+ 2. Increasing the dose level promotes  tooth growth.
+
